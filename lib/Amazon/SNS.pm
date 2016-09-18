@@ -162,7 +162,9 @@ sub dispatch
 	# try three times, a status code of 200-299 will exit the loop
 	foreach my $try (1 .. 3) {
 
-		$response = LWP::UserAgent->new->post($self->service, 'Content' => $uri->query);
+		my $ua = LWP::UserAgent->new;
+    $ua->env_proxy;
+		$response = $ua->post($self->service, 'Content' => $uri->query);
 		$self->status_code($response->code);
 
 		if ($response->is_success) {
@@ -369,7 +371,7 @@ Amazon::SNS - Amazon Simple Notification Service made simpler
   print $_->arn, "\n" for @topics;
 
 
- 
+
   # change region
 
   $sns->service('http://sns.us-east-1.amazonaws.com');
@@ -402,9 +404,9 @@ Sorry for not providing a better documentation, patches are always accepted. ;)
 
 =item $sns->CreateTopic($name)
 
-	Gives you an Amazon::SNS::Topic object with the given name, creating it 
+	Gives you an Amazon::SNS::Topic object with the given name, creating it
 	if it does not already exist in your Amazon SNS account.
-	
+
 =item $sns->DeleteTopic($arn)
 
 	Deletes a topic using its ARN.
@@ -444,7 +446,7 @@ Sorry for not providing a better documentation, patches are always accepted. ;)
 =item $sns->secret('...')
 
 	Get/set secret.
-	
+
 =item $sns->debug
 
 =item $sns->debug(1)
